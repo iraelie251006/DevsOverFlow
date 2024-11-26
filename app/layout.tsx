@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import React from "react";
 
 import "./globals.css";
-import Navbar from "@/components/navigation/navbar";
 import ThemeProvider from "@/context/Theme";
 
 // localFont function is used to load a local font file
@@ -46,7 +45,6 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
           {children}
         </ThemeProvider>
       </body>
