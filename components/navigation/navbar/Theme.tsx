@@ -26,13 +26,13 @@ const Theme = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+          <span className="text-lg text-yellow-400">☀️</span> Light
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+          <span className="text-lg text-slate-500">🌗</span> Dark
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+          <span className="text-lg">🖥️</span> System
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

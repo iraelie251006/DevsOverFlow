@@ -28,6 +28,16 @@ export default {
   				'800': '#F4F6F8',
   				'850': '#FDFDFD',
   				'900': '#FFFFFF'
+  			},
+  			sidebar: {
+  				DEFAULT: 'hsl(var(--sidebar-background))',
+  				foreground: 'hsl(var(--sidebar-foreground))',
+  				primary: 'hsl(var(--sidebar-primary))',
+  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+  				accent: 'hsl(var(--sidebar-accent))',
+  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+  				border: 'hsl(var(--sidebar-border))',
+  				ring: 'hsl(var(--sidebar-ring))'
   			}
   		},
   		boxShadow: {
@@ -42,19 +52,19 @@ export default {
   		},
   		fontFamily: {
   			inter: ['var(--font-inter)'],
-  			'spaceGrotesk': ['var(--font-space-grotesk)']
+  			spaceGrotesk: ['var(--font-space-grotesk)']
   		},
   		borderRadius: {
-			"2": '8px',
-			"1.5": '6px',
+  			'2': '8px',
+  			'1.5': '6px',
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
-		backgroundImage: {
-			"auth-dark": 'url("/images/auth-dark.png")',
-			"auth-light": 'url("/images/auth-light.png")'
-		}
+  		backgroundImage: {
+  			'auth-dark': 'url("/images/auth-dark.png")',
+  			'auth-light': 'url("/images/auth-light.png")'
+  		}
   	}
   },
   plugins: [require("tailwindcss-animate")],
