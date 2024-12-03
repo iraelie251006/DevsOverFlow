@@ -1,9 +1,49 @@
 import Link from "next/link";
 
+import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 
-const Home = async () => {
+const questions = [
+  {
+    _id: "1",
+    title: "How to learn React?",
+    description: "I want to learn React, can anyone help me?",
+    tags: [
+      { _id: "1", name: "React" },
+      { _id: "2", name: "JavaScript" },
+    ],
+    author: { _id: "1", name: "John Doe" },
+    upvotes: 10,
+    answers: 5,
+    views: 100,
+    createdAt: new Date(),
+  },
+  {
+    _id: "2",
+    title: "How to learn JavaScript?",
+    description: "I want to learn JavaScript, can anyone help me?",
+    tags: [
+      { _id: "1", name: "React" },
+      { _id: "2", name: "JavaScript" },
+    ],
+    author: { _id: "1", name: "John Doe" },
+    upvotes: 10,
+    answers: 5,
+    views: 100,
+    createdAt: new Date(),
+  },
+];
+interface SearchParams {
+  searchParams: Promise<{[key: string]: string}>
+}
+const Home = async ({searchParams} : SearchParams) => {
+  const {query = ""} = await searchParams;
+
+  const filteredQuestions = questions.filter((question) =>
+    question.title.toLowerCase().includes(query?.toLowerCase())
+  );
+
   return (
     <>
       <section className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center">
@@ -15,13 +55,19 @@ const Home = async () => {
           <Link href={ROUTES.ASK_QUESTION}>Ask Question</Link>
         </Button>
       </section>
-      <section className="mt-11">LocalSearch</section>
-      Home Filter
+      <section className="mt-11">
+        <LocalSearch
+          route="/"
+          imgSrc="/icons/search.svg"
+          placeholder="Search questions..."
+          otherClasses="flex-1"
+        />
+      </section>
+      {/* Home Filter */}
       <div className="mt-10 flex w-full flex-col gap-6">
-        <p>Question 1</p>
-        <p>Question 2</p>
-        <p>Question 3</p>
-        <p>Question 4</p>
+        {filteredQuestions.map(({_id, title}) => (
+          <h1 key={_id}>{title}</h1>
+        ))}
       </div>
     </>
   );
