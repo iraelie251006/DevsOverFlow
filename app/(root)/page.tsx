@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filter/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,12 @@ const questions = [
       { _id: "1", name: "React" },
       { _id: "2", name: "JavaScript" },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: {
+      _id: "1",
+      name: "John Doe",
+      imgUrl:
+        "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
+    },
     upvotes: 10,
     answers: 5,
     views: 100,
@@ -28,7 +34,12 @@ const questions = [
       { _id: "1", name: "JavaScript" },
       { _id: "2", name: "JavaScript" },
     ],
-    author: { _id: "1", name: "John Doe" },
+    author: {
+      _id: "1",
+      name: "Jane Doe",
+      imgUrl:
+        "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
+    },
     upvotes: 10,
     answers: 5,
     views: 100,
@@ -72,8 +83,8 @@ const Home = async ({ searchParams }: SearchParams) => {
       </section>
       <HomeFilter />
       <div className="mt-10 flex w-full flex-col gap-6">
-        {filteredQuestions.map(({ _id, title }) => (
-          <h1 key={_id}>{title}</h1>
+        {filteredQuestions.map((question) => (
+          <QuestionCard key={question._id} question={question} />
         ))}
       </div>
     </>
