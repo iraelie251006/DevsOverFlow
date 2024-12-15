@@ -24,6 +24,6 @@ const questionSchema = new Schema<IQuestion>({
     author: {type: Schema.Types.ObjectId, ref: 'User', required: true},
 }, { timestamps: true });
 
-const Question = models?.question || model<IQuestion>("Question", questionSchema)
+const Question = models?.Question || model<IQuestion>("Question", questionSchema)
 
 export default Question

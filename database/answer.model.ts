@@ -16,6 +16,6 @@ const AnswerSchema = new Schema<IAnswer>({
     downvotes: {type: Number, default: 0},
 }, {timestamps: true})
 
-const Answer = models?.answer || model<IAnswer>("Answer", AnswerSchema);
+const Answer = models?.Answer || model<IAnswer>("Answer", AnswerSchema);
 
 export default Answer;
