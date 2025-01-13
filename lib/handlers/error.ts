@@ -40,7 +40,7 @@ const handleError = (error: unknown, responseType: ResponseType = "server") => {
     const validationError = new ValidationError(
       error.flatten().fieldErrors as Record<string, string[]>
     );
-    logger.error({err: error}, `validationError: ${validationError.message}`)
+    logger.error({err: error}, `Validation Error: ${validationError.message}`)
     return formatResponse(
       responseType,
       validationError.statusCode,

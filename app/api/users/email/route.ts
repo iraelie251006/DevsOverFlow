@@ -20,6 +20,6 @@ export const POST = async (request: Request) => {
 
     return NextResponse.json({ success: true, data: user }, { status: 200 });
   } catch (error) {
-    handleError(error, "api") as APIErrorResponse;
+    return handleError(error, "api") as APIErrorResponse;
   }
 };

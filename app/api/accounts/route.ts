@@ -25,7 +25,7 @@ export const POST = async (request: Request) => {
 
     const existingAccount = await Account.findOne({
       provider: validatedData.provider,
-      prooviderAccountId: validatedData.providerAccountId,
+      providerAccountId: validatedData.providerAccountId,
     });
     if (existingAccount)
       throw new ForbiddenError(

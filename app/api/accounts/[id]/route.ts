@@ -69,6 +69,6 @@ export const PUT = async (
       { status: 200 }
     );
   } catch (error) {
-    handleError(error, "api") as APIErrorResponse;
+    return handleError(error, "api") as APIErrorResponse;
   }
 };
