@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   DefaultValues,
   FieldValues,
@@ -22,12 +23,12 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import ROUTES from "@/constants/routes";
-
+import { toast } from "@/hooks/use-toast";
 
 interface AuthFormProps<T extends FieldValues> {
   schema: ZodType<T>;
   defaultValues: T;
-  onSubmit: (data: T) => Promise<{ success: boolean }>;
+  onSubmit: (data: T) => Promise<ActionResponse>;
   formType: "SIGN_IN" | "SIGN_UP";
 }
 const AuthForm = <T extends FieldValues>({
@@ -36,16 +37,35 @@ const AuthForm = <T extends FieldValues>({
   schema,
   defaultValues,
 }: AuthFormProps<T>) => {
+  const router = useRouter();
   // ...
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues as DefaultValues<T>,
   });
   // 2. Define a submit handler.
-  const handleSubmit: SubmitHandler<T> = async () => {
+  const handleSubmit: SubmitHandler<T> = async (data) => {
     // TODO: Authenticate the User
+    const result = (await onSubmit(data)) as ActionResponse;
+
+    if (result?.success) {
+      toast({
+        title: "Success",
+        description:
+          formType === "SIGN_IN"
+            ? "Signed in successfully"
+            : "Signed up successfully",
+      });
+      router.push(ROUTES.HOME);
+    } else {
+      toast({
+        title: `Error ${result?.status}`,
+        description: result?.error?.message,
+        variant: "destructive"
+      })
+    }
   };
-  
+
   const ButtonText = formType === "SIGN_IN" ? "Sign In" : "Sign Up";
 
   return (
@@ -99,28 +119,27 @@ const AuthForm = <T extends FieldValues>({
         </Button>
         <div className="flex justify-center">
           {formType === "SIGN_IN" ? (
-          <p>
-            Don&apos;t have an account?{"  "}
-            <Link
-              href={ROUTES.SIGN_UP}
-              className="paragraph-semibold primary-text-gradient"
-            >
-              Register
-            </Link>
-          </p>
-        ) : (
-          <p>
-            Already have an account?{"  "}
-            <Link
-              href={ROUTES.SIGN_IN}
-              className="paragraph-semibold primary-text-gradient"
-            >
-              Sign In
-            </Link>
-          </p>
-        )}  
+            <p>
+              Don&apos;t have an account?{"  "}
+              <Link
+                href={ROUTES.SIGN_UP}
+                className="paragraph-semibold primary-text-gradient"
+              >
+                Register
+              </Link>
+            </p>
+          ) : (
+            <p>
+              Already have an account?{"  "}
+              <Link
+                href={ROUTES.SIGN_IN}
+                className="paragraph-semibold primary-text-gradient"
+              >
+                Sign In
+              </Link>
+            </p>
+          )}
         </div>
-        
       </form>
     </Form>
   );
