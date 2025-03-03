@@ -15,3 +15,10 @@ interface AuthCredentials {
     email: string,
     password: string,
 }
+
+interface AvatarProps {
+    id: string,
+    name: string,
+    imageUrl?: string | null, 
+    className?: string
+}
