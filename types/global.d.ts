@@ -13,7 +13,7 @@ interface Author {
 interface Question {
     _id: string,
     title: string,
-    description: string,
+    content: string,
     tags: Tags[],
     author: Author,
     createdAt: Date,
@@ -37,3 +37,8 @@ type ErrorResponse = ActionResponse<undefined> & {success: false};
 
 type APIErrorResponse = NextResponse<ErrorResponse>
 type APIResponse<T = null> = NextResponse<SuccessResponse<T> | ErrorResponse>
+
+interface RouteParams {
+    params: Promise<Record<string, string>>
+    searchParams: Promise<Record<string, string>>
+}
