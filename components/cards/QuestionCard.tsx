@@ -14,7 +14,6 @@ const QuestionCard = ({
   question: {
     _id,
     title,
-    description,
     tags,
     author,
     upvotes,
@@ -35,7 +34,6 @@ const QuestionCard = ({
               {title}
             </h3>
           </Link>
-          <p className="mt-2">{description}</p>
         </div>
       </div>
       <div className="mt-3 flex w-full flex-wrap gap-2">
@@ -45,7 +43,7 @@ const QuestionCard = ({
       </div>
       <div className="flex-between mt-6 w-full flex-wrap gap-3">
         <Metric
-          imgUrl={author.imgUrl}
+          imgUrl={author.image}
           alt={author.name}
           value={author.name}
           title={`• asked ${getTimeStamp(createdAt)}`}

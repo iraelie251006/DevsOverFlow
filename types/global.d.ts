@@ -7,7 +7,7 @@ interface Tags {
 interface Author {
     _id: string,
     name: string,
-    imgUrl: string
+    image: string
 }
 
 interface Question {
@@ -41,4 +41,12 @@ type APIResponse<T = null> = NextResponse<SuccessResponse<T> | ErrorResponse>
 interface RouteParams {
     params: Promise<Record<string, string>>
     searchParams: Promise<Record<string, string>>
+}
+
+interface PaginatedSearchParams {
+    page?: number;
+    pageSize?: number;
+    query?: string;
+    filter?: string;
+    sort?: string;
 }
