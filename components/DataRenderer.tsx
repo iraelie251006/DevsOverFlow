@@ -41,7 +41,7 @@ const StateSkeleton = ({
   message,
   button,
 }: stateSkeletonProps) => (
-  <div className="mt-16 flex w-full flex-col items-center justify-center sm:mt-36">
+  <div className="mt-10 flex w-full flex-col items-center justify-center max-sm:mt-9">
     <>
       <Image
         src={image.dark}
