@@ -20,7 +20,8 @@ interface AvatarProps {
     id: string,
     name: string,
     imageUrl?: string | null, 
-    className?: string
+    className?: string,
+    fallbackClassName?: string
 }
 
 interface CreateQuestionParams {

@@ -15,7 +15,7 @@ const Tags = async ({ searchParams }: RouteParams) => {
   });
 
   const { tags } = data || {};
-  console.log("Tags: ", JSON.stringify(tags, null, 2));
+  
   return (
     <>
       <h1 className="h2-bold text-dark100_light900 text-3xl">Tags</h1>
@@ -31,9 +31,13 @@ const Tags = async ({ searchParams }: RouteParams) => {
           error={error}
           data={tags}
           empty={EMPTY_TAGS}
-          render={(tags) => <div className="mt-10 flex w-full flex-wrap gap-4">
-            {tags.map((tag) => (<TagCard key={tag._id} {...tag}/>))}
-          </div>}
+          render={(tags) => (
+            <div className="mt-10 flex w-full flex-wrap justify-around gap-4">
+              {tags.map((tag) => (
+                <TagCard key={tag._id} {...tag} />
+              ))}
+            </div>
+          )}
         />
       </section>
     </>

@@ -2,7 +2,7 @@
 
 import mongoose, { FilterQuery } from "mongoose";
 
-import Question, { IQuestionDoc } from "@/database/question.model";
+import Question from "@/database/question.model";
 import TagQuestion from "@/database/tag-question.model";
 import Tag, { ITagDoc } from "@/database/tag.model";
 
@@ -80,7 +80,7 @@ export const CreateQuestion = async (
 
 export const editQuestion = async (
   params: EditQuestionParams
-): Promise<ActionResponse<IQuestionDoc>> => {
+): Promise<ActionResponse<Question>> => {
   const validationResult = await action({
     params,
     schema: EditQuestionSchema,
@@ -124,7 +124,7 @@ export const editQuestion = async (
       (tag: ITagDoc) =>
         !tags.some((t) => t.toLowerCase() === tag.name.toLowerCase())
     );
-    console.log(question.tags)
+    console.log(question.tags);
     const newTagDocuments = [];
 
     if (tagsToAdd.length > 0) {
@@ -195,7 +195,9 @@ export const getQuestion = async (
   const { questionId } = validationResult.params!;
 
   try {
-    const question = await Question.findById(questionId).populate("tags");
+    const question = await Question.findById(questionId)
+      .populate("tags")
+      .populate("author", "_id name image");
 
     if (!question) {
       throw new Error(`Question not found`);
