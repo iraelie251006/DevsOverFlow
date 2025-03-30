@@ -17,10 +17,9 @@ const EditQuestion = async ({ params }: RouteParams) => {
   if (!success) return notFound();
 
   if (question?.author._id.toString() !== session?.user?.id) {
-    console.log("------------------ Not the author ------------------")
     return redirect(ROUTES.QUESTION(id));
   }
-    
+
   return (
     <main>
       <QuestionForm question={question} isEdit />
