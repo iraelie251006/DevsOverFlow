@@ -27,6 +27,11 @@ import TagCard from "../cards/TagCard";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
+const Editor = dynamic(() => import("@/components/editor"), {
+    // Make sure we turn SSR off
+    ssr: false,
+  });
+
 interface Params {
   question?: Question;
   isEdit?: boolean;
@@ -34,10 +39,7 @@ interface Params {
 const QuestionForm = ({ question, isEdit = false }: Params) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const Editor = dynamic(() => import("@/components/editor"), {
-    // Make sure we turn SSR off
-    ssr: false,
-  });
+  
   const editorRef = useRef<MDXEditorMethods>(null);
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),

@@ -18,10 +18,9 @@
    FormMessage,
  } from "@/components/ui/form";
  import { AnswerSchema } from "@/lib/validations";
- 
  const Editor = dynamic(() => import("@/components/editor"), {
-   ssr: false,
- });
+    ssr: false,
+  });
  
  const AnswerForm = () => {
    const [isSubmitting, setIsSubmitting] = useState(false);
