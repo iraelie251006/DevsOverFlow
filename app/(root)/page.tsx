@@ -8,46 +8,6 @@ import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/states";
 import { getQuestions } from "@/lib/actions/question.action";
-// const questions = [
-//   {
-//     _id: "1",
-//     title: "How to learn React?",
-//     description: "I want to learn React, can anyone help me?",
-//     tags: [
-//       { _id: "1", name: "React" },
-//       { _id: "2", name: "JavaScript" },
-//     ],
-//     author: {
-//       _id: "1",
-//       name: "John Doe",
-//       imgUrl:
-//         "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
-//     },
-//     upvotes: 10,
-//     answers: 5,
-//     views: 100,
-//     createdAt: new Date(),
-//   },
-//   {
-//     _id: "2",
-//     title: "How to learn JavaScript?",
-//     description: "I want to learn JavaScript, can anyone help me?",
-//     tags: [
-//       { _id: "1", name: "JavaScript" },
-//       { _id: "2", name: "JavaScript" },
-//     ],
-//     author: {
-//       _id: "1",
-//       name: "Jane Doe",
-//       imgUrl:
-//         "https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg",
-//     },
-//     upvotes: 10,
-//     answers: 5,
-//     views: 100,
-//     createdAt: new Date(),
-//   },
-// ];
 
 interface SearchParams {
   searchParams: Promise<{ [key: string]: string }>;
