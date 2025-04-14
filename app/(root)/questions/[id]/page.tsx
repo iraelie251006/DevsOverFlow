@@ -7,6 +7,7 @@ import AnswerForm from "@/components/form/AnswerForm";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
+import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 
@@ -21,6 +22,19 @@ const QuestionDetails = async ({ params }: RouteParams) => {
 
   if (!success || !question) redirect("/404");
   const { author, createdAt, views, answers, title, tags, content } = question;
+
+  const {
+    success: areAnswerLoaded,
+    data: answersResult,
+    error: answerError,
+  } = await getAnswers({
+    questionId: id,
+    page: 1,
+    pageSize: 10,
+    filter: "latest",
+  });
+
+  console.log("Answers: ", answersResult);
   return (
     <>
       <div className="flex-start w-full flex-col">
@@ -82,7 +96,7 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         ))}
       </div>
       <section className="my-5">
-        <AnswerForm questionId={question._id}/>
+        <AnswerForm questionId={question._id} />
       </section>
     </>
   );
