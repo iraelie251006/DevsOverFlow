@@ -293,4 +293,10 @@ body {
       rgba(19, 22, 28, 0.7) 100%
     );
   }
+
+  .hash-span {
+    margin-top: -140px;
+    padding-bottom: 140px;
+    display: block;
+  }
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
+import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/form/AnswerForm";
@@ -95,6 +96,16 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           />
         ))}
       </div>
+
+      <section className="my-5">
+        <AllAnswers
+          data={answersResult ? answersResult?.answers : []}
+          success={areAnswerLoaded}
+          error={answerError}
+          totalAnswers={answersResult?.totalAnswers || 0}
+        />
+      </section>
+
       <section className="my-5">
         <AnswerForm questionId={question._id} />
       </section>

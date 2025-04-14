@@ -30,6 +30,12 @@ export const EMPTY_QUESTION = {
   },
 };
 
+export const EMPTY_ANSWERS = {
+  title: "No Answers Found",
+  message:
+    "The answer board is empty. Make it rain with your brilliant answer to get things rolling",
+};
+
 export const EMPTY_TAGS = {
   title: "No Tags Found",
   message: "The tag cloud is empty. Add some keywords to make it rain.",
