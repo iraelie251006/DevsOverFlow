@@ -48,6 +48,7 @@ const AnswerForm = ({ questionId }: { questionId: string }) => {
 
       if (result.success) {
         form.reset();
+        editorRef.current?.setMarkdown("");
 
         toast({
           title: "Answer posted successfully",
