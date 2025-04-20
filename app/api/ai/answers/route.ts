@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 import handleError from "@/lib/handlers/error";
 import { ValidationError } from "@/lib/http-errors";
 import { AIAnswerSchema } from "@/lib/validations";
 
-const MISTRAL = process.env.LLAMA_MISTRAL;
+
 export const runtime = "edge";
 
 export const POST = async (req: NextRequest) => {
@@ -19,7 +19,7 @@ export const POST = async (req: NextRequest) => {
       throw new ValidationError(validatedData.error.flatten().fieldErrors);
     }
 
-    const response = await fetch(`${MISTRAL}`, {
+    const response = await fetch(`http://localhost:11434/api/generate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -27,7 +27,7 @@ export const POST = async (req: NextRequest) => {
       body: JSON.stringify({
         model: "mistral",
         prompt: `Generate a markdown-formatted response to the following question: ${validatedData.data.question}. Base it on the following content: ${validatedData.data.content}.`,
-        stream: false,
+        stream: true,
       }),
     });
 
@@ -64,7 +64,11 @@ export const POST = async (req: NextRequest) => {
       },
     });
 
-    return NextResponse.json({ success: true, data: stream }, { status: 200 });
+    return new Response(stream, {
+        headers: {
+          "Content-Type": "text/plain; charset=utf-8",
+        },
+      });
   } catch (error) {
     return handleError(error, "api") as APIErrorResponse;
   }

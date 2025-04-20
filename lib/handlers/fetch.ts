@@ -13,7 +13,7 @@ export async function fetchHandler<T>(
   url: string,
   options: FetchOptions = {}
 ): Promise<ActionResponse<T>> {
-    const { timeout = 5000, headers: customHeader = {}, ...restOptions } = options;
+    const { timeout = 100000, headers: customHeader = {}, ...restOptions } = options;
 
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
