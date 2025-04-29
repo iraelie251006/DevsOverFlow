@@ -35,7 +35,6 @@ const QuestionDetails = async ({ params }: RouteParams) => {
     filter: "latest",
   });
 
-  console.log("Answers: ", answersResult);
   return (
     <>
       <div className="flex-start w-full flex-col">
@@ -107,7 +106,11 @@ const QuestionDetails = async ({ params }: RouteParams) => {
       </section>
 
       <section className="my-5">
-        <AnswerForm questionId={question._id} questionTitle={question.title} questionContent={question.content}/>
+        <AnswerForm
+          questionId={question._id}
+          questionTitle={question.title}
+          questionContent={question.content}
+        />
       </section>
     </>
   );

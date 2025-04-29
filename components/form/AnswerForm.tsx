@@ -28,15 +28,13 @@ const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
 });
 
-const AnswerForm = ({
-  questionId,
-  questionTitle,
-  questionContent,
-}: {
+interface Props {
   questionId: string;
   questionTitle: string;
   questionContent: string;
-}) => {
+}
+
+const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
   const [isAnswering, startAnsweringTranstion] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
   const session = useSession();
@@ -77,7 +75,7 @@ const AnswerForm = ({
 
   const generateAIAnswer = async () => {
     if (session.status !== "authenticated") {
-      toast({
+      return toast({
         title: "Please Login or Register",
         description: "You must be logged in to use this feature.",
         variant: "destructive",
@@ -92,7 +90,7 @@ const AnswerForm = ({
       );
 
       if (!success) {
-        toast({
+        return toast({
           title: "Error",
           description: error?.message,
           variant: "destructive",
@@ -110,8 +108,7 @@ const AnswerForm = ({
       toast({
         title: "AI Answer Generated",
         description: "The AI answer has been generated successfully.",
-      })
-
+      });
     } catch (error) {
       toast({
         title: "Error",
