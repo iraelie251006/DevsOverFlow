@@ -131,8 +131,8 @@ Create a new file named `.env` in the root of your project and add the following
 # Mongodb
 MONGODB_URI=
 
-# OpenAI
-OPENAI_API_KEY=
+# GEMINI AI
+GEMINI_API_KEY=
 
 # Rapid API
 NEXT_PUBLIC_RAPID_API_KEY=
