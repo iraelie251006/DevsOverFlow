@@ -52,7 +52,6 @@ export async function fetchHandler<T>(
       logger.warn(`Request to ${url} timed out`);
     } else {
       logger.error(`Error fetching ${url}: ${error.message}`);
-      console.log("==========================")
     }
 
     return handleError(error) as ActionResponse<T>;

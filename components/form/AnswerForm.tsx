@@ -57,12 +57,15 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
 
       if (result.success) {
         form.reset();
-        editorRef.current?.setMarkdown("");
 
         toast({
           title: "Answer posted successfully",
           description: "Your answer has been posted successfully",
         });
+
+        if (editorRef.current) {
+          editorRef.current?.setMarkdown("");
+        }
       } else {
         toast({
           title: "Error",
@@ -81,12 +84,15 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
         variant: "destructive",
       });
     }
-    setIsAISubmitting(false);
+    setIsAISubmitting(true);
+
+    const userAnswer = editorRef.current?.getMarkdown();
 
     try {
       const { success, data, error } = await api.ai.getAnswer(
         questionTitle,
-        questionContent
+        questionContent,
+        userAnswer
       );
 
       if (!success) {
@@ -118,6 +124,8 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
             : "An unexpected error occurred.",
         variant: "destructive",
       });
+    } finally {
+      setIsAISubmitting(false);
     }
   };
 
