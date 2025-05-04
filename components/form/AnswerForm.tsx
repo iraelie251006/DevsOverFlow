@@ -62,10 +62,6 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
           title: "Answer posted successfully",
           description: "Your answer has been posted successfully",
         });
-
-        if (editorRef.current) {
-          editorRef.current?.setMarkdown("");
-        }
       } else {
         toast({
           title: "Error",
@@ -103,8 +99,16 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
         });
       }
 
-      const formattedAnswer = data.replace(/<br>/g, "\n").toString().trim();
+      if (!editorRef.current) {
+        return toast({
+          title: "Editor not ready",
+          description: "Please wait until the editor loads.",
+          variant: "destructive",
+        });
+      }
 
+      const formattedAnswer = data.replace(/<br>/g, "\n").toString().trim();
+      console.log(editorRef.current);
       if (editorRef.current) {
         editorRef.current.setMarkdown(formattedAnswer);
         form.setValue("content", formattedAnswer);
@@ -137,7 +141,7 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
         </h4>
         <Button
           className="btn light-border-2 gap-1.5 rounded-md border px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
-          disabled={isAISubmitting}
+          disabled={isAISubmitting || !editorRef.current}
           onClick={generateAIAnswer}
         >
           {isAISubmitting ? (

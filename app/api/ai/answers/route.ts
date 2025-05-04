@@ -45,7 +45,7 @@ export const POST = async (req: NextRequest) => {
 
     const data = await response.json();
     const result = data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "❌ No response";
-    console.log(result);
+    // console.log(result);
     
     return NextResponse.json({ success: true, data: result }, { status: 200 });
   } catch (error) {
