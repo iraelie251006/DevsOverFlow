@@ -141,7 +141,7 @@ const AnswerForm = ({ questionId, questionTitle, questionContent }: Props) => {
         </h4>
         <Button
           className="btn light-border-2 gap-1.5 rounded-md border px-4 py-2.5 text-primary-500 shadow-none dark:text-primary-500"
-          disabled={isAISubmitting}
+          disabled={isAISubmitting || !editorRef.current}
           onClick={generateAIAnswer}
         >
           {isAISubmitting ? (
