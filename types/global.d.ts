@@ -18,6 +18,7 @@ interface Question {
     author: Author,
     createdAt: Date,
     upvotes: number,
+    downvotes: number,
     views: number,
     answers: number
 }
