@@ -57,6 +57,6 @@ interface CreateVoteParams {
     voteType: "upvote" | "downvote",
 }
 
-interface UpdateVoteCountParams extends CreateAnswerParams{
+interface UpdateVoteCountParams extends CreateVoteParams{
     change: 1 | -1
 }

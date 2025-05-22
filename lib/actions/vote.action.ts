@@ -1,13 +1,46 @@
 "use server";
 
-import mongoose from "mongoose";
+import mongoose, { ClientSession } from "mongoose";
 
-import { Vote } from "@/database";
+import { Answer, Question, Vote } from "@/database";
 
 import action from "../handlers/action";
 import handleError from "../handlers/error";
-import { CreateVoteSchema } from "../validations";
+import { CreateVoteSchema, UpdateVoteCountSchema } from "../validations";
 
+export const updateVote = async (
+  params: UpdateVoteCountParams,
+  session?: ClientSession
+): Promise<ActionResponse> => {
+  const validationResult = await action({
+    params,
+    schema: UpdateVoteCountSchema,
+  });
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+  const { targetId, targetType, voteType, change } = validationResult.params!;
+
+  const Model = targetType === "question" ? Question : Answer;
+  const voteField = voteType === "upvote" ? "upvotes" : "downvotes";
+
+  try {
+    const result = await Model.findByIdAndUpdate(
+      targetId,
+      { $inc: { [voteField]: change } },
+      { new: true, session }
+    );
+
+    if (!result) {
+      return handleError(
+        new Error("Failed to update vote count")
+      ) as ErrorResponse;
+    }
+    return { success: true };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
 export const createVote = async (
   params: CreateVoteParams
 ): Promise<ActionResponse> => {
@@ -36,10 +69,45 @@ export const createVote = async (
     }).session(session);
 
     if (existingVote) {
-        if (existingVote.voteType === voteType) {
-            await Vote.deleteOne({_id: existingVote._id}).session(session)
-        }
+      if (existingVote.voteType === voteType) {
+        await Vote.deleteOne({ _id: existingVote._id }).session(session);
+        await updateVote(
+          { targetId, targetType, voteType, change: -1 },
+          session
+        );
+      } else {
+        await Vote.findByIdAndUpdate(
+          existingVote._id,
+          { voteType },
+          { new: true, session }
+        );
+        await updateVote(
+          {
+            targetId,
+            targetType,
+            voteType,
+            change: 1,
+          },
+          session
+        );
+      }
+    } else {
+      await Vote.create([{ targetId, targetType, voteType, change: 1 }], {
+        session,
+      });
+      await updateVote(
+        {
+          targetId,
+          targetType,
+          voteType,
+          change: 1,
+        },
+        session
+      );
     }
+    await session.commitTransaction();
+    await session.endSession();
+    return { success: true };
   } catch (error) {
     await session.abortTransaction();
     return handleError(error) as ErrorResponse;
