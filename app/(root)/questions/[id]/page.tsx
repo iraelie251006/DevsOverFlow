@@ -65,10 +65,10 @@ const QuestionDetails = async ({ params }: RouteParams) => {
           <div className="flex justify-end">
             <Suspense
               fallback={
-                <>
+                <div className="flex items-center justify-center gap-1">
                   <ReloadIcon className="mr-2 size-4 animate-spin" />
-                  Loading...
-                </>
+                  <p>Loading...</p>
+                </div>
               }
             >
               <Votes
