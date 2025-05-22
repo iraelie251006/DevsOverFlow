@@ -6,7 +6,11 @@ import { Answer, Question, Vote } from "@/database";
 
 import action from "../handlers/action";
 import handleError from "../handlers/error";
-import { CreateVoteSchema, UpdateVoteCountSchema } from "../validations";
+import {
+  CreateVoteSchema,
+  HasVotedSchema,
+  UpdateVoteCountSchema,
+} from "../validations";
 
 export const updateVote = async (
   params: UpdateVoteCountParams,
@@ -113,5 +117,46 @@ export const createVote = async (
     return handleError(error) as ErrorResponse;
   } finally {
     session.endSession();
+  }
+};
+
+export const hasVoted = async (
+  params: HasVotedParams
+): Promise<ActionResponse<HasVotedResponse>> => {
+  const validationResult = await action({
+    params,
+    schema: HasVotedSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { targetId, targetType } = validationResult.params!;
+  const userId = validationResult.session?.user?.id;
+
+  try {
+    const vote = await Vote.findOne({
+      author: userId,
+      actionId: targetId,
+      actionType: targetType,
+    });
+
+    if (!vote) {
+      return {
+        success: false,
+        data: { hasUpVoted: false, hasDownVoted: false },
+      };
+    }
+    return {
+      success: true,
+      data: {
+        hasUpVoted: vote.voteType === "upvote",
+        hasDownVoted: vote.voteType === "downvote",
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
   }
 };
