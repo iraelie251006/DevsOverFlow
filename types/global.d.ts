@@ -68,5 +68,5 @@ interface Answer {
 interface Collection {
     _id: string,
     author: string | Author,
-    question: string | Question,
+    question: Question,
 }
