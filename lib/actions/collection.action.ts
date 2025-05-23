@@ -9,7 +9,7 @@ import action from "../handlers/action";
 import handleError from "../handlers/error";
 import { CollectionBaseSchema } from "../validations";
 
-export const toogleSaveQuestion = async (
+export const toggleSaveQuestion = async (
   params: CollectionBaseParams
 ): Promise<ActionResponse<{ saved: boolean }>> => {
   const validationResult = await action({
