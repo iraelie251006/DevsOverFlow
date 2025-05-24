@@ -31,33 +31,39 @@ export const getUsers = async (
       { name: { $regex: query, $options: "i" } },
       { email: { $regex: query, $options: "i" } },
     ];
-  };
+  }
 
   let sortCriteria = {};
 
   switch (filter) {
-    case 'newest':
-        sortCriteria = { createdAt: -1 };
-        break;
-    case 'oldest':
-        sortCriteria = { createdAt: 1 };
-        break;
-    case 'popular':
-        sortCriteria = { reputation: -1 };
-        break;
+    case "newest":
+      sortCriteria = { createdAt: -1 };
+      break;
+    case "oldest":
+      sortCriteria = { createdAt: 1 };
+      break;
+    case "popular":
+      sortCriteria = { reputation: -1 };
+      break;
     default:
-        sortCriteria = { createdAt: -1 };
-        break;
+      sortCriteria = { createdAt: -1 };
+      break;
   }
 
   try {
     const totalUsers = await User.countDocuments(filterQuery);
 
-    const users = await User.find(filterQuery).sort(sortCriteria).skip(skip).limit(limit);
+    const users = await User.find(filterQuery)
+      .sort(sortCriteria)
+      .skip(skip)
+      .limit(limit);
 
     const isNext = totalUsers > skip + users.length;
 
-    return {success: true, data: {users: JSON.parse(JSON.stringify(users)), isNext}}
+    return {
+      success: true,
+      data: { users: JSON.parse(JSON.stringify(users)), isNext },
+    };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
