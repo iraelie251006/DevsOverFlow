@@ -2,7 +2,7 @@ import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import LocalSearch from "@/components/search/LocalSearch";
 import ROUTES from "@/constants/routes";
-import { EMPTY_QUESTION } from "@/constants/states";
+import { EMPTY_COLLECTIONS } from "@/constants/states";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
 
 interface SearchParams {
@@ -37,7 +37,7 @@ const Collections = async ({ searchParams }: SearchParams) => {
         success={success}
         error={error}
         data={collection}
-        empty={EMPTY_QUESTION}
+        empty={EMPTY_COLLECTIONS}
         render={(collection) =>
           collection.map((item) => (
             <QuestionCard key={item._id} question={item.question} />
