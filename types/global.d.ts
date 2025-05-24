@@ -70,3 +70,15 @@ interface Collection {
     author: string | Author,
     question: Question,
 }
+
+interface User {
+    _id: string,
+    name: string,
+    username: string,
+    email: string,
+    location?: string,
+    image?: string,
+    bio?: string,
+    portfolio?: string,
+    reputation?: number,
+}
