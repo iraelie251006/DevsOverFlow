@@ -54,3 +54,12 @@ export const EMPTY_COLLECTIONS = {
     href: ROUTES.COLLECTION,
   },
 };
+
+export const EMPTY_USERS = {
+  title: "No Users Found",
+  message: "The user list is empty. Maybe it’s waiting for you to join the party.",
+  button: {
+    text: "Join Now",
+    href: ROUTES.SIGN_UP,
+  },
+}
