@@ -1,7 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { auth } from "@/auth";
+import { auth, signOut } from "@/auth";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
 
@@ -27,11 +38,36 @@ const Navbar = async () => {
       <div className="flex-between gap-5">
         <Theme />
         {session?.user?.id && (
-          <UserAvatar
-            id={session.user.id}
-            name={session.user.name!}
-            imageUrl={session.user?.image}
-          />
+          <>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <UserAvatar
+                  id={session.user.id}
+                  name={session.user.name!}
+                  imageUrl={session.user?.image}
+                />
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action will log you out of your account.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <form
+                    action={async () => {
+                      "use server";
+                      await signOut();
+                    }}
+                  >
+                    <AlertDialogAction type="submit">Log out</AlertDialogAction>
+                  </form>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </>
         )}
         <MobileNavigation />
       </div>
