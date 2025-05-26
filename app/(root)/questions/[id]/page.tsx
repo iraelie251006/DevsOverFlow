@@ -7,6 +7,7 @@ import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/form/AnswerForm";
+import LoggedInUser from "@/components/LoggedInUser";
 import Metric from "@/components/Metric";
 import SaveQuestion from "@/components/questions/SaveQuestion";
 import UserAvatar from "@/components/UserAvatar";
@@ -93,7 +94,10 @@ const QuestionDetails = async ({ params }: RouteParams) => {
                 </div>
               }
             >
-              <SaveQuestion questionId={question._id} hasSavedQuestionPromise={hasSavedQuestionPromise}/>
+              <SaveQuestion
+                questionId={question._id}
+                hasSavedQuestionPromise={hasSavedQuestionPromise}
+              />
             </Suspense>
           </div>
         </div>
@@ -125,15 +129,23 @@ const QuestionDetails = async ({ params }: RouteParams) => {
         />
       </div>
       <Preview content={content} />
-      <div className="mt-8 flex flex-wrap gap-2">
-        {tags.map((tag: Tags) => (
-          <TagCard
-            key={tag._id}
-            _id={tag._id as string}
-            name={tag.name}
-            compact
+      <div className="flex-between">
+        <div className="mt-8 flex flex-wrap gap-2">
+          {tags.map((tag: Tags) => (
+            <TagCard
+              key={tag._id}
+              _id={tag._id as string}
+              name={tag.name}
+              compact
+            />
+          ))}
+        </div>
+        <div className="flex justify-end">
+          <LoggedInUser
+            href={`${ROUTES.QUESTION(question._id)}`}
+            author={author._id}
           />
-        ))}
+        </div>
       </div>
 
       <section className="my-5">
