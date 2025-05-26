@@ -3,6 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
+import { auth } from "@/auth";
 import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
@@ -21,6 +22,8 @@ import { formatNumber, getTimeStamp } from "@/lib/utils";
 
 const QuestionDetails = async ({ params }: RouteParams) => {
   const { id } = await params;
+  const session = await auth();
+  if (!session) return redirect(ROUTES.SIGN_IN);
 
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
   const [_, { success, data: question }] = await Promise.all([
