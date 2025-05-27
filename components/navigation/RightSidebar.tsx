@@ -6,7 +6,7 @@ import ROUTES from "@/constants/routes";
 import TagCard from "../cards/TagCard";
 import { getHotQuestions } from "@/lib/actions/question.action";
 import DataRenderer from "../DataRenderer";
-
+import { getTopTags } from "@/lib/actions/tag.action";
 
 const popularTags = [
   { _id: "1", name: "react", questions: 100 },
@@ -18,6 +18,11 @@ const popularTags = [
 
 const RightSidebar = async () => {
   const { success, error, data: hotQuestions } = await getHotQuestions();
+  const {
+    success: tagSuccess,
+    error: tagError,
+    data: popularTags,
+  } = await getTopTags();
   return (
     <section className="background-light900_dark200 light-border sticky right-0 top-0 flex h-screen w-[350px] flex-col gap-6 overflow-y-auto border-l-2 p-6 pt-36 shadow-2xl dark:shadow-none max-xl:hidden">
       <div>
@@ -31,7 +36,7 @@ const RightSidebar = async () => {
           success={success}
           error={error}
           render={(hotQuestions) => (
-            <div className="mt-7 flex w-full flex-col gap-[30px]">
+            <div className="flex w-full flex-col gap-[30px]">
               {hotQuestions.map(({ _id, title }) => (
                 <Link
                   href={ROUTES.QUESTION(_id)}
@@ -57,18 +62,29 @@ const RightSidebar = async () => {
       </div>
       <div className="mt-16">
         <h3 className="h3-bold text-dark200_light900">Popular Tags</h3>
-        <div className="mt-7 flex flex-col gap-4">
-          {popularTags.map(({ _id, name, questions }) => (
-            <TagCard
-              key={_id}
-              _id={_id}
-              name={name}
-              questions={questions}
-              showCount
-              compact
-            />
-          ))}
-        </div>
+        <DataRenderer
+          data={popularTags}
+          success={tagSuccess}
+          error={tagError}
+          empty={{
+            title: "No tags found",
+            message: "There are no popular tags available at the moment.",
+          }}
+          render={(popularTags) => (
+            <div className=" flex flex-col gap-4">
+              {popularTags.map(({ _id, name, questions }) => (
+                <TagCard
+                  key={_id}
+                  _id={_id}
+                  name={name}
+                  questions={questions}
+                  showCount
+                  compact
+                />
+              ))}
+            </div>
+          )}
+        />
       </div>
     </section>
   );

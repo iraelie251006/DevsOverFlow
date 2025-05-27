@@ -1,6 +1,7 @@
 interface Tags {
     _id: string,
     name: string,
+    questions?: number,
     compact?: boolean
 }
 
