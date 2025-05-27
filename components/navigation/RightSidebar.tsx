@@ -17,12 +17,10 @@ const popularTags = [
 ];
 
 const RightSidebar = async () => {
-  const { success, error, data: hotQuestions } = await getHotQuestions();
-  const {
-    success: tagSuccess,
-    error: tagError,
-    data: popularTags,
-  } = await getTopTags();
+  const [
+    { success, error, data: hotQuestions },
+    { success: tagSuccess, error: tagError, data: popularTags },
+  ] = await Promise.all([getHotQuestions(), getTopTags()]);
   return (
     <section className="background-light900_dark200 light-border sticky right-0 top-0 flex h-screen w-[350px] flex-col gap-6 overflow-y-auto border-l-2 p-6 pt-36 shadow-2xl dark:shadow-none max-xl:hidden">
       <div>
