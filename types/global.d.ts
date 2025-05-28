@@ -82,4 +82,5 @@ interface User {
     bio?: string,
     portfolio?: string,
     reputation?: number,
+    createdAt: Date,
 }

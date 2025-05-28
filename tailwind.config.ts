@@ -29,6 +29,9 @@ export default {
           "850": "#FDFDFD",
           "900": "#FFFFFF",
         },
+        link: {
+          "100": "#1DAIF2",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",
