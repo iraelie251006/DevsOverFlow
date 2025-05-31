@@ -186,7 +186,9 @@ export const getUserAnswers = async (
 
 export const getUserTopTags = async (
   params: GetTagParams
-): Promise<ActionResponse<{ tags: {_id: string, name: string, count: number}[] }>> => {
+): Promise<
+  ActionResponse<{ tags: { _id: string; name: string; count: number }[] }>
+> => {
   const validationResult = await action({
     params,
     schema: GetUsersTagSchema,
@@ -200,28 +202,32 @@ export const getUserTopTags = async (
 
   try {
     const pipeline: PipelineStage[] = [
-      {$match: {author: new Types.ObjectId(userId)}},
-      {$unwind: "$tags"},
-      {$group: {_id: "$tags", count: {$sum: 1}}},
-      {$lookup: {
-        from: "tags",
-        localField: "_id",
-        foreignField: "_id",
-        as: "tagInfo"
-      }},
-      {$unwind: "$tagInfo"},
-      {$sort: {count: -1}},
-      {$limit: 10},
-      {$project: {
-        _id: "$tagInfo._id",
-        name: "$tagInfo.name",
-        count: 1
-      }},
+      { $match: { author: new Types.ObjectId(userId) } },
+      { $unwind: "$tags" },
+      { $group: { _id: "$tags", count: { $sum: 1 } } },
+      {
+        $lookup: {
+          from: "tags",
+          localField: "_id",
+          foreignField: "_id",
+          as: "tagInfo",
+        },
+      },
+      { $unwind: "$tagInfo" },
+      { $sort: { count: -1 } },
+      { $limit: 10 },
+      {
+        $project: {
+          _id: "$tagInfo._id",
+          name: "$tagInfo.name",
+          count: 1,
+        },
+      },
     ];
 
     const tags = await Question.aggregate(pipeline);
 
-    return {success: true, data: {tags: JSON.parse(JSON.stringify(tags))}};
+    return { success: true, data: { tags: JSON.parse(JSON.stringify(tags)) } };
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }

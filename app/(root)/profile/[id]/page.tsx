@@ -65,7 +65,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
   });
 
   const { questions, isNext: hasMoreQuestions } = userQuestions! || {};
-  
+
   const { answers, isNext: hasMoreAnswers } = userAnswers! || {};
 
   const { tags } = userTopTags! || {};
@@ -193,7 +193,7 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
         <div className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
           <h3 className="h3-bold text-dark299_light900">Top Tech</h3>
           <div className="mt-7 flex flex-col gap-4">
-          <DataRenderer
+            <DataRenderer
               data={tags}
               empty={EMPTY_TAGS}
               success={userTopTagsSuccess}
@@ -201,7 +201,14 @@ const Profile = async ({ params, searchParams }: RouteParams) => {
               render={(tags) => (
                 <div className="flex w-full flex-col gap-6">
                   {tags.map((tag) => (
-                    <TagCard key={tag._id} _id={tag._id} name={tag.name} questions={tag.count} showCount compact/>
+                    <TagCard
+                      key={tag._id}
+                      _id={tag._id}
+                      name={tag.name}
+                      questions={tag.count}
+                      showCount
+                      compact
+                    />
                   ))}
                 </div>
               )}
