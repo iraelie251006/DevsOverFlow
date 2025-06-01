@@ -21,6 +21,11 @@ import Theme from "./Theme";
 
 const Navbar = async () => {
   const session = await auth();
+
+  const handleClick = async () => {
+    "use server";
+    await signOut();
+  };
   return (
     <nav className="flex-between background-light900_dark200 fixed z-50 w-full gap-5 p-6 shadow-light-300 dark:shadow-none sm:px-12">
       <Link href={ROUTES.HOME} className="flex items-center gap-1">
@@ -47,7 +52,7 @@ const Navbar = async () => {
                   imageUrl={session.user?.image}
                 />
               </AlertDialogTrigger>
-              <AlertDialogContent>
+              <AlertDialogContent className="background-light800_dark300">
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                   <AlertDialogDescription>
@@ -55,15 +60,10 @@ const Navbar = async () => {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <form
-                    action={async () => {
-                      "use server";
-                      await signOut();
-                    }}
-                  >
-                    <AlertDialogAction type="submit">Log out</AlertDialogAction>
-                  </form>
+                  <AlertDialogCancel className="btn">Cancel</AlertDialogCancel>
+                  <AlertDialogAction className="!border-primary-100 !bg-primary-500 !text-light-900" onClick={handleClick}>
+                    Log Out
+                  </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>

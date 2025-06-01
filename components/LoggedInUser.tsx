@@ -13,7 +13,7 @@ const LoggedInUser = ({ href, author }: { href: string, author: string }) => {
     <Link
       href={`${href}/edit`}
       type="submit"
-      className="primary-gradient w-fit rounded-2 px-5 py-1.5 font-semibold text-slate-800"
+      className="primary-gradient w-fit rounded-2 px-5 py-1.5 font-semibold text-light-900"
     >
       Edit
     </Link>

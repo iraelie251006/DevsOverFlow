@@ -9,10 +9,12 @@ import { getTimeStamp } from "@/lib/utils";
 import Preview from "../editor/Preview";
 import UserAvatar from "../UserAvatar";
 import Votes from "../votes/Votes";
+import EditDeleteAction from "../user/EditDeleteAction";
 
-interface Props extends Answer{
-  containerClasses?: string,
+interface Props extends Answer {
+  containerClasses?: string;
   showReadMore?: boolean;
+  showActionBtns?: boolean;
 }
 const AnswerCard = ({
   _id,
@@ -23,12 +25,19 @@ const AnswerCard = ({
   downvotes,
   question,
   containerClasses,
-  showReadMore = false
+  showReadMore = false,
+  showActionBtns
 }: Props) => {
   const hasVotedPromise = hasVoted({ targetId: _id, targetType: "answer" });
   return (
-    <article className="light-border border-b-2 py-10">
+    <article className="light-border border-b-2 py-10 relative">
       <span id={`answer-${_id}`} className="hash-span" />
+
+      {showActionBtns && (
+        <div className="background-light800 flex-center absolute -right-2 -top-5 size-9 rounded-full">
+          <EditDeleteAction type="Answer" itemId={_id}/>
+        </div>
+      )}
 
       <div className="mb-5 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <div className="flex flex-1 items-start gap-1 sm:items-center">
@@ -72,7 +81,10 @@ const AnswerCard = ({
       </div>
       <Preview content={content} />
       {showReadMore && (
-        <Link href={`/questions/${question}#answer-${_id}`} className="body-semibold relative z-10 font-spaceGrotesk text-primary-500">
+        <Link
+          href={`/questions/${question}#answer-${_id}`}
+          className="body-semibold relative z-10 font-spaceGrotesk text-primary-500"
+        >
           <p className="mt-1">Read More...</p>
         </Link>
       )}
