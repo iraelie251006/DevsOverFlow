@@ -10,12 +10,15 @@ import action from "../handlers/action";
 import handleError from "../handlers/error";
 import {
   AskQuestionSchema,
+  DeleteQuestionSchema,
   EditQuestionSchema,
   GetQuestionSchema,
   IncrementViewsSchema,
   PaginatedSearchParamsSchema,
 } from "../validations";
 import dbConnect from "../mongoose";
+import { Answer, Collection, Vote } from "@/database";
+import { revalidatePath } from "next/cache";
 
 export const CreateQuestion = async (
   params: CreateQuestionParams
@@ -311,7 +314,9 @@ export const incrementViews = async (
   }
 };
 
-export const getHotQuestions = async (): Promise<ActionResponse<Question[]>> => {
+export const getHotQuestions = async (): Promise<
+  ActionResponse<Question[]>
+> => {
   try {
     await dbConnect();
 
@@ -319,8 +324,87 @@ export const getHotQuestions = async (): Promise<ActionResponse<Question[]>> => 
       .sort({ views: -1, upvotes: -1 })
       .limit(5);
 
-      return { success: true, data: JSON.parse(JSON.stringify(questions)) };
+    return { success: true, data: JSON.parse(JSON.stringify(questions)) };
   } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
+
+export const deleteQuestion = async (
+  params: DeleteQuestionParams
+): Promise<ActionResponse> => {
+  const validationResult = await action({
+    params,
+    schema: DeleteQuestionSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const { questionId } = validationResult.params!;
+  const { user } = validationResult.session!;
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const question = await Question.findById(questionId).session(session);
+    if (!question) throw new Error("Question not found");
+
+    if (question.author.toString() !== user?.id) {
+      throw new Error("You are not authorized to delete this question");
+    }
+
+    // Delete references from collection
+    await Collection.deleteMany({ question: questionId }).session(session);
+
+    // Delete references from TagQuestion collection
+    await TagQuestion.deleteMany({ question: questionId }).session(session);
+
+    // For all tags of Question, find them and reduce their count
+    if (question.tags.length > 0) {
+      await Tag.updateMany(
+        { _id: { $in: question.tags } },
+        { $inc: { questions: -1 } },
+        { session }
+      );
+    }
+    // remove all votes related to the question
+    await Vote.deleteMany({
+      actionId: questionId,
+      actionType: "question",
+    }).session(session);
+
+    // Remove all answers and their votes of the question
+    const answers = await Answer.find({ question: questionId }).session(
+      session
+    );
+
+    if (answers.length > 0) {
+      await Answer.deleteMany({ question: questionId }).session(session);
+
+      await Vote.deleteMany({
+        actionId: { $in: answers.map((answer) => answer.id) },
+        actionType: "answer",
+      }).session(session);
+    }
+console.log("====================================")
+    // Delete Question
+    await Question.findByIdAndDelete(questionId).session(session);
+    console.log("====================================")
+    await session.commitTransaction();
+    session.endSession();
+
+    // Revalidate to reflect immediate changes on UI
+    revalidatePath(`/profile/${user?.id}`);
+    return { success: true };
+  } catch (error) {
+    await session.abortTransaction();
+    session.endSession();
+
     return handleError(error) as ErrorResponse;
   }
 };

@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { deleteQuestion } from "@/lib/actions/question.action";
 interface Props {
   type: "Question" | "Answer";
   itemId: string;
@@ -25,9 +26,10 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
       router.push(`/questions/${itemId}/edit`);
     }
   };
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (type === "Question") {
       // Logic to delete question
+      await deleteQuestion({questionId: itemId})
       toast({
         title: "Question deleted",
         description: "Your question has been deleted successfully.",
