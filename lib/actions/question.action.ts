@@ -391,10 +391,10 @@ export const deleteQuestion = async (
         actionType: "answer",
       }).session(session);
     }
-console.log("====================================")
+
     // Delete Question
     await Question.findByIdAndDelete(questionId).session(session);
-    console.log("====================================")
+
     await session.commitTransaction();
     session.endSession();
 

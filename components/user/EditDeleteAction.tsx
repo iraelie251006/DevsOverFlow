@@ -14,6 +14,7 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { deleteQuestion } from "@/lib/actions/question.action";
+import { deleteAnswer } from "@/lib/actions/answer.action";
 interface Props {
   type: "Question" | "Answer";
   itemId: string;
@@ -36,6 +37,7 @@ const EditDeleteAction = ({ type, itemId }: Props) => {
       });
     } else if (type === "Answer") {
       // Logic to delete answer
+      await deleteAnswer({answerId: itemId})
       toast({
         title: "Answer deleted",
         description: "Your answer has been deleted successfully.",
