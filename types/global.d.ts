@@ -90,4 +90,5 @@ interface BadgeCounts {
     GOLD: number,
     SILVER: number,
     BRONZE: number,
+    reputationPoints: number,
 }

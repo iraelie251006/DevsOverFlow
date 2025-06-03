@@ -81,7 +81,7 @@ interface GetUserQuestionsParams
   userId: string;
 }
 
-interface GetUserAnswersParams extends PaginatedSearchParams{
+interface GetUserAnswersParams extends PaginatedSearchParams {
   userId: string;
 }
 
@@ -95,4 +95,19 @@ interface DeleteQuestionParams {
 
 interface DeleteAnswerParams {
   answerId: string;
+}
+
+interface CreateInteractionParams {
+  action:
+    | "view"
+    | "upvote"
+    | "downvote"
+    | "search"
+    | "bookmark"
+    | "edit"
+    | "post"
+    | "delete";
+  actionId: string;
+  actionTarget: "question" | "answer";
+  authorId: string;
 }
