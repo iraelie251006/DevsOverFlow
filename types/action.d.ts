@@ -1,3 +1,6 @@
+import { IInteractionDoc } from "@/database/interaction.model";
+import mongoose from "mongoose";
+
 interface SignInWithOAuthParams {
   provider: "github" | "google";
   providerAccountId: string;
@@ -110,4 +113,11 @@ interface CreateInteractionParams {
   actionId: string;
   actionTarget: "question" | "answer";
   authorId: string;
+}
+
+interface UpdateReputationParams {
+  interaction: IInteractionDoc,
+  session: mongoose.ClientSession,
+  performerId: string,
+  authorId: string,
 }
