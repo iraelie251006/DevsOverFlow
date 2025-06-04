@@ -14,6 +14,9 @@ import {
   DeleteAnswerSchema,
   GetAnswersSchema,
 } from "../validations";
+import { CreateAnswerParams, DeleteAnswerParams } from "@/types/action";
+import { unstable_after as after } from "next/server";
+import { createInteraction } from "./interaction.action";
 
 export const createAnswer = async (
   params: CreateAnswerParams
@@ -54,6 +57,15 @@ export const createAnswer = async (
 
     question.answers += 1;
     await question.save({ session });
+
+    after(async () => {
+      await createInteraction({
+        action: 'post',
+        actionTarget: 'answer',
+        actionId: newAnswer._id.toString(),
+        authorId: userId as string,
+      })
+    })
 
     await session.commitTransaction();
 

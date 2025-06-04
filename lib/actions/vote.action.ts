@@ -13,6 +13,14 @@ import {
   HasVotedSchema,
   UpdateVoteCountSchema,
 } from "../validations";
+import {
+  UpdateVoteCountParams,
+  CreateVoteParams,
+  HasVotedParams,
+  HasVotedResponse,
+} from "@/types/action";
+import { unstable_after as after } from "next/server";
+import { createInteraction } from "./interaction.action";
 
 export const updateVote = async (
   params: UpdateVoteCountParams,
@@ -68,6 +76,16 @@ export const createVote = async (
   session.startTransaction();
 
   try {
+    const Model = targetType === "question" ? Question : Answer;
+
+    const contentDoc = await Model.findById(targetId).session(session);
+
+    if (!contentDoc) {
+      throw new Error(`${targetType} not found`);
+    }
+
+    const contentAuthorId = contentDoc.author.toString();
+
     const existingVote = await Vote.findOne({
       author: userId,
       actionId: targetId,
@@ -130,6 +148,15 @@ export const createVote = async (
         session
       );
     }
+
+    after(async () => {
+      await createInteraction({
+        action: "post",
+        actionTarget: targetType,
+        actionId: targetId,
+        authorId: contentAuthorId,
+      });
+    });
     await session.commitTransaction();
     await session.endSession();
 
