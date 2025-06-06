@@ -116,8 +116,15 @@ interface CreateInteractionParams {
 }
 
 interface UpdateReputationParams {
-  interaction: IInteractionDoc,
-  session: mongoose.ClientSession,
-  performerId: string,
-  authorId: string,
+  interaction: IInteractionDoc;
+  session: mongoose.ClientSession;
+  performerId: string;
+  authorId: string;
+}
+
+interface RecommendationParams {
+  userId: string;
+  query?: string;
+  skip: number;
+  limit: number;
 }
