@@ -21,7 +21,8 @@ interface Question {
     upvotes: number,
     downvotes: number,
     views: number,
-    answers: number
+    answers: number,
+    showActionBtns: boolean
 }
 
 type ActionResponse<T = null> = {
