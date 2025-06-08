@@ -111,3 +111,5 @@ export const assignBadges = (params: {
   });
   return badgeCounts;
 };
+
+export const processJobTitle = () => {}

@@ -1,5 +1,4 @@
 import CommonFilter from "@/components/filter/CommonFilter";
-import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { UserFilters } from "@/constants/filters";
@@ -26,7 +25,6 @@ const FindJobs = () => {
           Find Jobs
         </Button>
       </div>
-      {/* <Pagination page={page} isNext={isNext || false} /> */}
       <section className="mt-10">
         <JobCard />
       </section>
