@@ -128,3 +128,8 @@ interface RecommendationParams {
   skip: number;
   limit: number;
 }
+
+interface JobFilterParams {
+  query: string;
+  page: string;
+}
