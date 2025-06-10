@@ -33,7 +33,6 @@ const JobsFilter = ({ countriesList }: JobsFilterProps) => {
 
     router.push(newUrl, { scroll: false });
   };
-
   return (
     <div className="relative mt-11 flex w-full justify-between gap-5 max-sm:flex-col sm:items-center">
       <LocalSearch
@@ -60,13 +59,13 @@ const JobsFilter = ({ countriesList }: JobsFilterProps) => {
         <SelectContent className="body-semibold max-h-[350px] max-w-[250px]">
           <SelectGroup>
           {Array.isArray(countriesList) && countriesList.length > 0 ? (
-              countriesList.map((country: Country) => (
+              countriesList[1].map((country: Country) => (
                 <SelectItem
-                  key={country.name.common}
-                  value={country.name.common}
+                  key={country.id}
+                  value={country.name}
                   className="px-4 py-3"
                 >
-                  {country.name.common}
+                  {country.name}
                 </SelectItem>
               ))
             ) : (

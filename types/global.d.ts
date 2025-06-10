@@ -115,7 +115,7 @@ interface Job {
 }
 
 interface Country {
-  name: {
-    common: string;
-  };
+  [x: string]: any;
+  id: string,
+  name: string
 }
