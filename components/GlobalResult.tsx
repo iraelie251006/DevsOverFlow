@@ -1,14 +1,12 @@
 "use client";
 
+import { globalSearch } from "@/lib/actions/general.action";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
-import { globalSearch } from "@/lib/actions/general.action";
-
-import GlobalFilter from "./filters/GlobalFilter";
+import GlobalFilter from "./filter/GlobalFilter";
 
 const GlobalResult = () => {
   const searchParams = useSearchParams();

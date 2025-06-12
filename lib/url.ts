@@ -2,7 +2,7 @@ import qs from 'query-string';
 interface UrlQueryParams {
     params: string,
     key: string,
-    value: string
+    value: string | null
 }
 
 interface RemoveUrlQueryParams {

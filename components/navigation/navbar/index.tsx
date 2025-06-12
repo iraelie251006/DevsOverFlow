@@ -18,6 +18,7 @@ import ROUTES from "@/constants/routes";
 
 import MobileNavigation from "./MobileNavigation";
 import Theme from "./Theme";
+import GlobalSearch from "@/components/search/GlobalSearch";
 
 const Navbar = async () => {
   const session = await auth();
@@ -39,7 +40,7 @@ const Navbar = async () => {
           Dev<span className="text-primary-500">Flow</span>
         </p>
       </Link>
-      <p>Global Search</p>
+      <GlobalSearch />
       <div className="flex-between gap-5">
         <Theme />
         {session?.user?.id && (
@@ -61,7 +62,10 @@ const Navbar = async () => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel className="btn">Cancel</AlertDialogCancel>
-                  <AlertDialogAction className="!border-primary-100 !bg-primary-500 !text-light-900" onClick={handleClick}>
+                  <AlertDialogAction
+                    className="!border-primary-100 !bg-primary-500 !text-light-900"
+                    onClick={handleClick}
+                  >
                     Log Out
                   </AlertDialogAction>
                 </AlertDialogFooter>

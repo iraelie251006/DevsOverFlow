@@ -226,4 +226,9 @@ export const CreateInteractionSchema = z.object({
   actionTarget: z.enum(['question', 'answer']),
   actionId: z.string().min(1, {message: 'ActionId is required'}),
   authorId: z.string().min(1, {message: "AuthorId is required"}),
-})
+});
+
+export const GlobalSearchSchema = z.object({
+  query: z.string(),
+  type: z.string().nullable().optional(),
+});
