@@ -30,6 +30,7 @@ import {
 import { unstable_after as after } from "next/server";
 import { createInteraction } from "./interaction.action";
 import { auth } from "@/auth";
+import { cache } from "react";
 
 export const CreateQuestion = async (
   params: CreateQuestionParams
@@ -204,9 +205,9 @@ export const editQuestion = async (
   }
 };
 
-export const getQuestion = async (
+export const getQuestion = cache(async function getQuestion(
   params: GetQuestionParams
-): Promise<ActionResponse<Question>> => {
+): Promise<ActionResponse<Question>> {
   const validationResult = await action({
     params,
     schema: GetQuestionSchema,
@@ -232,7 +233,7 @@ export const getQuestion = async (
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-};
+});
 
 export const getQuestions = async (
   params: PaginatedSearchParams

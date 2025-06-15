@@ -22,6 +22,7 @@ import {
   UpdateUserParams,
 } from "@/types/action";
 import { assignBadges } from "../utils";
+import { cache } from "react";
 
 export const getUsers = async (
   params: PaginatedSearchParams
@@ -84,9 +85,9 @@ export const getUsers = async (
   }
 };
 
-export const getUser = async (
+export const getUser = cache(async function getUser(
   params: GetUserParams
-): Promise<ActionResponse<{ user: User }>> => {
+): Promise<ActionResponse<{ user: User }>> {
   const validationResult = await action({
     params,
     schema: GetUserSchema,
@@ -111,7 +112,7 @@ export const getUser = async (
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-};
+});
 
 export const getUserQuestions = async (
   params: GetUserQuestionsParams

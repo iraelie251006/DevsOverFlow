@@ -11,6 +11,8 @@ import {
   PaginatedSearchParamsSchema,
 } from "../validations";
 import dbConnect from "../mongoose";
+import { GetTagQuestionParams } from "@/types/action";
+import { cache } from "react";
 
 export const getTags = async (
   params: PaginatedSearchParams
@@ -77,11 +79,11 @@ export const getTags = async (
   }
 };
 
-export const getTagQuestions = async (
+export const getTagQuestions = cache(async function getTagQuestions(
   params: GetTagQuestionParams
 ): Promise<
   ActionResponse<{ tag: Tags; questions: Question[]; isNext: boolean }>
-> => {
+> {
   const validationResult = await action({
     params,
     schema: GetTagQuestionSchema,
@@ -99,7 +101,7 @@ export const getTagQuestions = async (
   try {
     const tag = await Tag.findById(tagId);
     if (!tag) throw new Error("Tag not found");
-    
+
     const filterQuery: FilterQuery<typeof Question> = {
       tags: { $in: [tagId] },
     };
@@ -132,16 +134,16 @@ export const getTagQuestions = async (
   } catch (error) {
     return handleError(error) as ErrorResponse;
   }
-};
+});
 
 export const getTopTags = async (): Promise<ActionResponse<Tags[]>> => {
   try {
     await dbConnect();
 
-    const tags = await Tag.find().sort({questions: -1}).limit(5);
+    const tags = await Tag.find().sort({ questions: -1 }).limit(5);
 
     return { success: true, data: JSON.parse(JSON.stringify(tags)) };
   } catch (error) {
-    return handleError(error) as ErrorResponse
+    return handleError(error) as ErrorResponse;
   }
-}
+};
