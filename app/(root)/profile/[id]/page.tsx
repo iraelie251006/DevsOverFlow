@@ -21,6 +21,28 @@ import Pagination from "@/components/Pagination";
 import AnswerCard from "@/components/cards/AnswerCard";
 import TagCard from "@/components/cards/TagCard";
 
+export const generateMetadata = async ({ params }: RouteParams) => {
+  const { id } = await params;
+
+  const { success, data, error } = await getUser({ userId: id });
+  if (!success || !data) {
+    return {
+      title: "User not found",
+      description: "The user you are looking for does not exist.",
+    };
+  }
+
+  return {
+    title: data.user.name,
+    description: data.user.bio?.slice(0, 100) || "User profile",
+    twitter: {
+      card: "summary_large_image",
+      title: data.user.name,
+      description: data.user.bio?.slice(0, 100) || "User profile",
+    },
+  }
+};
+
 const Profile = async ({ params, searchParams }: RouteParams) => {
   const { page, pageSize } = await searchParams;
   const { id } = await params;

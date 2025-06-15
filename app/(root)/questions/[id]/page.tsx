@@ -20,9 +20,31 @@ import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 
+export const generateMetadata = async ({ params }: RouteParams) => {
+  const { id } = await params;
+
+  const { success, data: question } = await getQuestion({ questionId: id });
+  if (!success || !question) {
+    return {
+      title: "Question not found",
+      description: "The question you are looking for does not exist.",
+    };
+  };
+
+  return {
+    title: question.title,
+    description: question.content.slice(0, 100) + "...",
+    twitter: {
+      card: 'summary_large_image',
+      title: question.title,
+      description: question.content.slice(0, 100) + "...",
+    },
+  };
+};
+
 const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
-  const {page, pageSize, filter} = await searchParams
+  const { page, pageSize, filter } = await searchParams;
   const session = await auth();
   if (!session) return redirect(ROUTES.SIGN_IN);
 
@@ -41,7 +63,7 @@ const QuestionDetails = async ({ params, searchParams }: RouteParams) => {
     error: answerError,
   } = await getAnswers({
     questionId: id,
-    page: Number(page) ||1,
+    page: Number(page) || 1,
     pageSize: Number(pageSize) || 10,
     filter,
   });

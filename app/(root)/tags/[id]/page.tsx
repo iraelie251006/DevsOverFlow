@@ -8,6 +8,34 @@ import { EMPTY_QUESTION } from "@/constants/states";
 import { getTagQuestions } from "@/lib/actions/tag.action";
 import Pagination from "@/components/Pagination";
 
+export const generateMetadata = async ({ params, searchParams }: RouteParams) => {
+  const { id } = await params;
+  const { page, pageSize, query } = await searchParams;
+
+  const { success, data, error } = await getTagQuestions({
+    tagId: id,
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    query,
+  });
+  if (!success || !data || !data.tag) {
+    return {
+      title: "Tag not found",
+      description: "The tag you are looking for does not exist.",
+    };
+  }
+
+  return {
+    title: data.tag.name.charAt(0).toUpperCase().concat(data.tag.name.slice(1)),
+    description: `Questions tagged with ${data.tag.name}`,
+    twitter: {
+      card: "summary_large_image",
+      title: data.tag.name.charAt(0).toUpperCase().concat(data.tag.name.slice(1)),
+      description: `Questions tagged with ${data.tag.name}`,
+    },
+  }
+};
+
 const page = async ({ params, searchParams }: RouteParams) => {
   const { id } = await params;
   const { page, pageSize, query } = await searchParams;
