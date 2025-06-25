@@ -45,8 +45,9 @@ export const POST = async (request: Request) => {
       if (Object.keys(updatedData).length > 0) {
         await User.updateOne(
           { _id: existingUser._id },
-          { $set: updatedData }
-        ).session(session);
+          { $set: updatedData },
+          { session }
+        );
       }
     }
 
@@ -72,6 +73,7 @@ export const POST = async (request: Request) => {
     await session.commitTransaction();
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
+    console.error("OAuth signin error:", error)
     await session.abortTransaction();
     return handleError(error, "api") as APIErrorResponse;
   } finally {
