@@ -186,14 +186,14 @@ export const deleteAnswer = async (
     // Delete an answer
     await Answer.findByIdAndDelete(answerId).session(session);
     await session.commitTransaction();
-    session.endSession();
 
     revalidatePath(`profile/${user?.id}`);
 
     return { success: true };
   } catch (error) {
     await session.abortTransaction();
-    session.endSession();
     return handleError(error) as ErrorResponse;
+  } finally {
+    await session.endSession();
   }
 };

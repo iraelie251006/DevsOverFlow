@@ -158,7 +158,6 @@ export const createVote = async (
       });
     });
     await session.commitTransaction();
-    await session.endSession();
 
     revalidatePath(ROUTES.QUESTION(targetId));
 
@@ -167,7 +166,7 @@ export const createVote = async (
     await session.abortTransaction();
     return handleError(error) as ErrorResponse;
   } finally {
-    session.endSession();
+    await session.endSession();
   }
 };
 

@@ -69,12 +69,12 @@ export const POST = async (request: Request) => {
         { session }
       );
     }
-    session.commitTransaction();
+    await session.commitTransaction();
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
-    session.abortTransaction();
+    await session.abortTransaction();
     return handleError(error, "api") as APIErrorResponse;
   } finally {
-    session.endSession();
+    await session.endSession();
   }
 };
