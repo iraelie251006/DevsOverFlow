@@ -9,13 +9,13 @@ import User from "./user.model";
 import Vote from "./vote.model";
 
 export {
-    Account,
-    Answer,
-    Collection,
-    Interaction,
-    Question,
-    Tag,
-    TagQuestion,
-    User,
-    Vote
-}
+  Account,
+  Answer,
+  Collection,
+  Interaction,
+  Question,
+  Tag,
+  TagQuestion,
+  User,
+  Vote,
+};

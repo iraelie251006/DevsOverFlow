@@ -29,13 +29,13 @@ export const generateMetadata = async ({ params }: RouteParams) => {
       title: "Question not found",
       description: "The question you are looking for does not exist.",
     };
-  };
+  }
 
   return {
     title: question.title,
     description: question.content.slice(0, 100) + "...",
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: question.title,
       description: question.content.slice(0, 100) + "...",
     },

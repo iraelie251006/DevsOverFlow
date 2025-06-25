@@ -116,8 +116,8 @@ interface Job {
 
 interface Country {
   [x: string]: any;
-  id: string,
-  name: string
+  id: string;
+  name: string;
 }
 
 interface GlobalSearchedItem {

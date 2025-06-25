@@ -60,12 +60,12 @@ export const createAnswer = async (
 
     after(async () => {
       await createInteraction({
-        action: 'post',
-        actionTarget: 'answer',
+        action: "post",
+        actionTarget: "answer",
         actionId: newAnswer._id.toString(),
         authorId: userId as string,
-      })
-    })
+      });
+    });
 
     await session.commitTransaction();
 

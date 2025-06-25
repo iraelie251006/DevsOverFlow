@@ -8,7 +8,9 @@ export const fetchLocation = async () => {
 
 export const fetchCountries = async () => {
   try {
-    const response = await fetch("https://api.worldbank.org/v2/country?format=json&per_page=300");
+    const response = await fetch(
+      "https://api.worldbank.org/v2/country?format=json&per_page=300"
+    );
     const result = await response.json();
     return result;
   } catch (error) {

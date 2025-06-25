@@ -1,4 +1,3 @@
-
 import ROUTES from "./routes";
 
 export const DEFAULT_EMPTY = {
@@ -57,9 +56,10 @@ export const EMPTY_COLLECTIONS = {
 
 export const EMPTY_USERS = {
   title: "No Users Found",
-  message: "The user list is empty. Maybe it’s waiting for you to join the party.",
+  message:
+    "The user list is empty. Maybe it’s waiting for you to join the party.",
   button: {
     text: "Join Now",
     href: ROUTES.SIGN_UP,
   },
-}
+};

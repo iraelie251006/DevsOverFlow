@@ -40,7 +40,7 @@ export const generateMetadata = async ({ params }: RouteParams) => {
       title: data.user.name,
       description: data.user.bio?.slice(0, 100) || "User profile",
     },
-  }
+  };
 };
 
 const Profile = async ({ params, searchParams }: RouteParams) => {
