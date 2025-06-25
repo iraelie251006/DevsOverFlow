@@ -11,6 +11,7 @@ import action from "../handlers/action";
 import handleError from "../handlers/error";
 import { NotFoundError } from "../http-errors";
 import { SignInSchema, SignUpSchema } from "../validations";
+import { AuthCredentials } from "@/types/action";
 
 export async function signUpWithCredentials(
   params: AuthCredentials
@@ -96,7 +97,10 @@ export async function signInWithCredentials(
       throw new NotFoundError("Account");
     }
 
-    const passwordMatch = await bcrypt.compare(password, existingAccount.password);
+    const passwordMatch = await bcrypt.compare(
+      password,
+      existingAccount.password
+    );
     if (!passwordMatch) throw new Error("Invalid password");
     await signIn("credentials", { email, password, redirect: false });
     return { success: true };

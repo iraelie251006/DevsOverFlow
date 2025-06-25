@@ -5,6 +5,8 @@ import ROUTES from "@/constants/routes";
 import { cn } from "@/lib/utils";
 
 import { Avatar, AvatarFallback } from "./ui/avatar";
+import { AvatarProps } from "@/types/action";
+
 
 const UserAvatar = ({
   id,

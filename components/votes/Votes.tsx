@@ -7,6 +7,7 @@ import React, { use, useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { createVote } from "@/lib/actions/vote.action";
 import { formatNumber } from "@/lib/utils";
+import { HasVotedResponse } from "@/types/action";
 
 interface Params {
   upvotes: number;
