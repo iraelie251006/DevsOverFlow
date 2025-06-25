@@ -73,7 +73,14 @@ export const POST = async (request: Request) => {
     await session.commitTransaction();
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
-    console.error("OAuth signin error:", error)
+    console.error("OAuth signin error:", error);
+    if (error instanceof Error) {
+      console.error("Error name:", error.name);
+      console.error("Error message:", error.message);
+      if ("stack" in error) {
+        console.error("Error stack:", error.stack);
+      }
+    }
     await session.abortTransaction();
     return handleError(error, "api") as APIErrorResponse;
   } finally {

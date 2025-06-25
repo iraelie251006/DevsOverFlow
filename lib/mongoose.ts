@@ -35,7 +35,11 @@ const dbConnect = async (): Promise<Mongoose> => {
 
   if (!cached.promise) {
     cached.promise = mongoose
-      .connect(MONGODB_URI, { dbName: "devflow" })
+      .connect(MONGODB_URI, {
+        dbName: "devflow",
+        retryWrites: true,
+        serverSelectionTimeoutMS: 30000,
+      })
       .then((result) => {
         logger.info("Connected to MongoDB");
         return result;
