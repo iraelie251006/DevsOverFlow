@@ -25,10 +25,26 @@ const spaceGrotesk = localFont({
 
 export const metadata: Metadata = {
   title: "Devflow",
+  authors: [
+    { name: "Niyubwayo Irakoze Elie", url: "https://iraelie.vercel.app" },
+  ],
   description:
     "A community-driven platform for asking and answering programming questions. Get help, share knowledge, and collaborate with developers from around the world. Explore topics in web development, mobile app development, algorithms, data structures, and more.",
   icons: {
     icon: "public/images/site-logo.svg",
+  },
+  openGraph: {
+    images: [
+      {
+        url: "/images/flow.jpeg",
+      },
+    ],
+    type: "website",
+    siteName: "Devflow",
+    title: "Devflow",
+    description:
+      "A community-driven platform for asking and answering programming questions. Get help, share knowledge, and collaborate with developers from around the world. Explore topics in web development, mobile app development, algorithms, data structures, and more.",
+    url: "https://devflow-blue.vercel.app",
   },
 };
 
