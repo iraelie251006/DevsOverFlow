@@ -176,7 +176,7 @@ export const deleteAnswer = async (
     // reduce question answer count
     await Question.findByIdAndUpdate(
       answer.question,
-      { $inc: { answer: -1 } },
+      { $inc: { answers: -1 } },
       { new: true }
     ).session(session);
     // Delete votes associated with the answer
@@ -187,7 +187,7 @@ export const deleteAnswer = async (
     await Answer.findByIdAndDelete(answerId).session(session);
     await session.commitTransaction();
 
-    revalidatePath(`profile/${user?.id}`);
+    revalidatePath(`/profile/${user?.id}`);
 
     return { success: true };
   } catch (error) {
