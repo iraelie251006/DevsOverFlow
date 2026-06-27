@@ -38,6 +38,7 @@ const Votes = ({
         description: "Only logged-in users can vote",
       });
     }
+    setIsLoading(true);
     try {
       const result = await createVote({ targetId, targetType, voteType });
       if (!result.success) {
