@@ -8,6 +8,7 @@ import { Collection, Question } from "@/database";
 
 import action from "../handlers/action";
 import handleError from "../handlers/error";
+import { escapeRegex } from "../utils";
 import {
   CollectionBaseSchema,
   PaginatedSearchParamsSchema,
@@ -147,11 +148,12 @@ export const getSavedQuestions = async (
     ];
 
     if (query) {
+      const safeQuery = escapeRegex(query);
       pipeline.push({
         $match: {
           $or: [
-            { "question.title": { $regex: query, $options: "i" } },
-            { "question.content": { $regex: query, $options: "i" } },
+            { "question.title": { $regex: safeQuery, $options: "i" } },
+            { "question.content": { $regex: safeQuery, $options: "i" } },
           ],
         },
       });
