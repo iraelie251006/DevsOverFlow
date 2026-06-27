@@ -4,13 +4,12 @@ import { Answer, Question, Tag, User } from "@/database";
 
 import action from "../handlers/action";
 import handleError from "../handlers/error";
+import { escapeRegex } from "../utils";
 import { GlobalSearchSchema } from "../validations";
 import { GlobalSearchParams } from "@/types/action";
 
 export async function globalSearch(params: GlobalSearchParams) {
   try {
-    console.log("QUERY", params);
-
     const validationResult = await action({
       params,
       schema: GlobalSearchSchema,
@@ -21,7 +20,7 @@ export async function globalSearch(params: GlobalSearchParams) {
     }
 
     const { query, type } = params;
-    const regexQuery = { $regex: query, $options: "i" };
+    const regexQuery = { $regex: escapeRegex(query), $options: "i" };
 
     let results = [];
 
@@ -74,8 +73,6 @@ export async function globalSearch(params: GlobalSearchParams) {
         id: type === "answer" ? item.question : item._id,
       }));
     }
-
-    console.log(results);
 
     return {
       success: true,
