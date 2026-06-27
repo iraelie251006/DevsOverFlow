@@ -1,6 +1,4 @@
 import { defineConfig, globalIgnores } from "eslint/config";
-import _import from "eslint-plugin-import";
-import { fixupPluginRules } from "@eslint/compat";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import js from "@eslint/js";
@@ -22,10 +20,6 @@ export default defineConfig([globalIgnores(["components/ui/**/*"]), {
         "plugin:tailwindcss/recommended",
         "prettier",
     ),
-
-    plugins: {
-        import: fixupPluginRules(_import),
-    },
 
     rules: {
         "import/order": ["error", {
