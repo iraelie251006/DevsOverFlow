@@ -8,6 +8,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function escapeRegex(input: string) {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 export const techDescriptionMap: { [key: string]: string } = {
   javascript:
     "JavaScript is a powerful language for building dynamic, interactive, and modern web applications.",
