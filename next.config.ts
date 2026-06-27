@@ -4,10 +4,8 @@ const nextConfig: NextConfig = {
   /* config options here */
   serverExternalPackages: ["pino", "pino-pretty"],
   eslint: {
+    // Pre-existing style debt (import order, camelCase, etc.) blocks builds; lint locally with `npx next lint`.
     ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
   },
   images: {
     remotePatterns: [
