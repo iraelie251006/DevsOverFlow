@@ -21,7 +21,7 @@ import {
   GetTagParams,
   UpdateUserParams,
 } from "@/types/action";
-import { assignBadges } from "../utils";
+import { assignBadges, escapeRegex } from "../utils";
 import { cache } from "react";
 
 export const getUsers = async (
@@ -43,9 +43,10 @@ export const getUsers = async (
   const filterQuery: FilterQuery<typeof User> = {};
 
   if (query) {
+    const safeQuery = escapeRegex(query);
     filterQuery.$or = [
-      { name: { $regex: query, $options: "i" } },
-      { email: { $regex: query, $options: "i" } },
+      { name: { $regex: safeQuery, $options: "i" } },
+      { email: { $regex: safeQuery, $options: "i" } },
     ];
   }
 
@@ -280,23 +281,26 @@ export const getUserStats = async (
       },
     ]);
 
+    const qs = questionStats ?? { count: 0, upvotes: 0, views: 0 };
+    const as = answerStats ?? { count: 0, upvotes: 0 };
+
     const badges = assignBadges({
       criteria: [
-        { type: "ANSWER_COUNT", count: answerStats.count },
-        { type: "QUESTION_COUNT", count: questionStats.count },
+        { type: "ANSWER_COUNT", count: as.count },
+        { type: "QUESTION_COUNT", count: qs.count },
         {
           type: "QUESTION_UPVOTES",
-          count: questionStats.upvotes + answerStats.upvotes,
+          count: qs.upvotes + as.upvotes,
         },
-        { type: "TOTAL_VIEWS", count: questionStats.views },
+        { type: "TOTAL_VIEWS", count: qs.views },
       ],
     });
 
     return {
       success: true,
       data: {
-        totalQuestions: questionStats?.count,
-        totalAnswers: answerStats?.count,
+        totalQuestions: qs.count,
+        totalAnswers: as.count,
         badges,
       },
     };
