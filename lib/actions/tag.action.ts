@@ -11,6 +11,7 @@ import {
   PaginatedSearchParamsSchema,
 } from "../validations";
 import dbConnect from "../mongoose";
+import { escapeRegex } from "../utils";
 import { GetTagQuestionParams } from "@/types/action";
 import { cache } from "react";
 
@@ -34,7 +35,7 @@ export const getTags = async (
   const filterQuery: FilterQuery<typeof Tag> = {};
 
   if (query) {
-    filterQuery.$or = [{ name: { $regex: query, $options: "i" } }];
+    filterQuery.$or = [{ name: { $regex: escapeRegex(query), $options: "i" } }];
   }
 
   let sortCriteria = {};
@@ -107,7 +108,7 @@ export const getTagQuestions = cache(async function getTagQuestions(
     };
 
     if (query) {
-      filterQuery.title = { $regex: query, $options: "i" };
+      filterQuery.title = { $regex: escapeRegex(query), $options: "i" };
     }
 
     const totalQuestions = await Question.countDocuments(filterQuery);
