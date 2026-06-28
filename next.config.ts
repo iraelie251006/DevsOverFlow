@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "standalone",
   serverExternalPackages: ["pino", "pino-pretty"],
   eslint: {
     // Pre-existing style debt (import order, camelCase, etc.) blocks builds; lint locally with `npx next lint`.
