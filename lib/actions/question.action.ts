@@ -17,6 +17,7 @@ import {
   PaginatedSearchParamsSchema,
 } from "../validations";
 import dbConnect from "../mongoose";
+import { escapeRegex } from "../utils";
 import { Answer, Collection, Interaction, Vote } from "@/database";
 import { revalidatePath } from "next/cache";
 import {
@@ -137,20 +138,18 @@ export const editQuestion = async (
     if (question.title !== title || question.content !== content) {
       question.title = title;
       question.content = content;
-      await question.save({ session });
     }
 
     const tagsToAdd = tags.filter(
       (tag) =>
-        !question.tags.some((t: ITagDoc) =>
-          t.name.toLowerCase().includes(tag.toLowerCase())
+        !question.tags.some(
+          (t: ITagDoc) => t.name.toLowerCase() === tag.toLowerCase()
         )
     );
     const tagsToRemove = question.tags.filter(
       (tag: ITagDoc) =>
         !tags.some((t) => t.toLowerCase() === tag.name.toLowerCase())
     );
-    console.log(question.tags);
     const newTagDocuments = [];
 
     if (tagsToAdd.length > 0) {
@@ -244,7 +243,7 @@ export const getQuestions = async (
   });
 
   if (validationResult instanceof Error) {
-    handleError(validationResult) as ErrorResponse;
+    return handleError(validationResult) as ErrorResponse;
   }
 
   const { page = 1, pageSize = 10, query, filter } = params;
@@ -274,9 +273,10 @@ export const getQuestions = async (
     }
 
     if (query) {
+      const safeQuery = escapeRegex(query);
       filterQuery.$or = [
-        { title: { $regex: query, $options: "i" } },
-        { content: { $regex: query, $options: "i" } },
+        { title: { $regex: safeQuery, $options: "i" } },
+        { content: { $regex: safeQuery, $options: "i" } },
       ];
     }
 
@@ -331,15 +331,15 @@ export const incrementViews = async (
   const { questionId } = validationResult.params!;
 
   try {
-    const question = await Question.findById(questionId);
+    const question = await Question.findByIdAndUpdate(
+      questionId,
+      { $inc: { views: 1 } },
+      { new: true }
+    );
 
     if (!question) {
       throw new Error("Question not found");
     }
-
-    question.views += 1;
-
-    await question.save();
 
     return { success: true, data: { views: question.views } };
   } catch (error) {
@@ -483,9 +483,10 @@ export async function getRecommendedQuestions({
   };
 
   if (query) {
+    const safeQuery = escapeRegex(query);
     recommendedQuery.$or = [
-      { title: { $regex: query, $options: "i" } },
-      { content: { $regex: query, $options: "i" } },
+      { title: { $regex: safeQuery, $options: "i" } },
+      { content: { $regex: safeQuery, $options: "i" } },
     ];
   }
 
