@@ -3,14 +3,6 @@ import mongoose, { Mongoose } from "mongoose";
 import logger from "./logger";
 import "@/database";
 
-const MONGODB_URI = process.env.MONGODB_URI;
-
-if (!MONGODB_URI) {
-  throw new Error(
-    "Please define the MONGODB_URI environment variable inside .env file"
-  );
-}
-
 interface MongooseCache {
   conn: Mongoose | null;
   promise: Promise<Mongoose> | null;
@@ -31,6 +23,13 @@ const dbConnect = async (): Promise<Mongoose> => {
   if (cached.conn) {
     logger.info("Using existing mongoose connection");
     return cached.conn;
+  }
+
+  const MONGODB_URI = process.env.MONGODB_URI;
+  if (!MONGODB_URI) {
+    throw new Error(
+      "Please define the MONGODB_URI environment variable inside .env file"
+    );
   }
 
   if (!cached.promise) {
