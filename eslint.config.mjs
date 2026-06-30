@@ -16,7 +16,6 @@ export default defineConfig([globalIgnores(["components/ui/**/*"]), {
     extends: compat.extends(
         "next/core-web-vitals",
         "next/typescript",
-        "standard",
         "plugin:tailwindcss/recommended",
         "prettier",
     ),
