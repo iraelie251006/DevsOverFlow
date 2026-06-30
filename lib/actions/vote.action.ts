@@ -19,7 +19,7 @@ import {
   HasVotedParams,
   HasVotedResponse,
 } from "@/types/action";
-import { unstable_after as after } from "next/server";
+import { after } from "next/server";
 import { createInteraction } from "./interaction.action";
 
 export const updateVote = async (
