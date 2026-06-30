@@ -28,7 +28,7 @@ import {
   DeleteQuestionParams,
   RecommendationParams,
 } from "@/types/action";
-import { unstable_after as after } from "next/server";
+import { after } from "next/server";
 import { createInteraction } from "./interaction.action";
 import { auth } from "@/auth";
 import { cache } from "react";
