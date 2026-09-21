@@ -4,10 +4,13 @@ import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
-import { IAccountDoc } from "./database/account.model";
-import { IUserDoc } from "./database/user.model";
 import { api } from "./lib/api";
 import { SignInSchema } from "./lib/validations";
+
+import dbConnect from "@/lib/mongoose";
+import Account from "@/database/account.model";
+import User from "@/database/user.model";
+
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -16,60 +19,35 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Credentials({
       async authorize(credentials) {
         const validatedFields = SignInSchema.safeParse(credentials);
-        if (validatedFields.success) {
-          const { email, password } = validatedFields.data;
+        if (!validatedFields.success) return null;
 
-          const { data: existingAccount } = (await api.accounts.getByProvider(
-            email
-          )) as ActionResponse<IAccountDoc>;
-          if (!existingAccount) return null;
+        const { email, password } = validatedFields.data;
 
-          const { data: existingUser } = (await api.users.getById(
-            existingAccount.userId.toString()
-          )) as ActionResponse<IUserDoc>;
-          if (!existingUser) return null;
+        await dbConnect();
 
-          const isValidPassword = await bcrypt.compare(
-            password,
-            existingAccount.password!
-          );
+        // For credentials, providerAccountId is stored as email
+        const existingAccount = await Account.findOne({
+          provider: "credentials",
+          providerAccountId: email,
+        });
+        if (!existingAccount) return null;
 
-          if (isValidPassword) {
-            return {
-              id: existingUser.id,
-              name: existingUser.name,
-              email: existingUser.email,
-              image: existingUser.image,
-            };
-          }
-        }
-        return null;
+        const existingUser = await User.findById(existingAccount.userId);
+        if (!existingUser) return null;
+
+        const isValid = await bcrypt.compare(password, existingAccount.password!);
+        if (!isValid) return null;
+
+        return {
+          id: existingUser._id.toString(),
+          name: existingUser.name,
+          email: existingUser.email,
+          image: existingUser.image,
+        };
       },
     }),
   ],
   callbacks: {
-    async session({ session, token }) {
-      session.user.id = token.sub as string;
-      return session;
-    },
-    async jwt({ token, account }) {
-      if (account) {
-        const { data: existingAccount, success } =
-          (await api.accounts.getByProvider(
-            account.type === "credentials"
-              ? token.email!
-              : account.providerAccountId
-          )) as ActionResponse<IAccountDoc>;
-
-        if (!success || !existingAccount) return token;
-
-        const userId = existingAccount.userId;
-
-        if (userId) token.sub = userId.toString();
-      }
-
-      return token;
-    },
     async signIn({ user, profile, account }) {
       if (account?.type === "credentials") return true;
       if (!account || !user) return false;
@@ -90,9 +68,31 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         providerAccountId: account.providerAccountId,
       })) as ActionResponse;
 
-      if (!success) return false;
+      return success ? true : false;
+    },
 
-      return true;
+    async jwt({ token, account }) {
+      if (account) {
+        await dbConnect();
+
+        // Query DB directly — no fetch
+        const existingAccount = await Account.findOne({
+          providerAccountId:
+            account.type === "credentials"
+              ? token.email!
+              : account.providerAccountId,
+        });
+
+        if (existingAccount?.userId) {
+          token.sub = existingAccount.userId.toString();
+        }
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      session.user.id = token.sub as string;
+      return session;
     },
   },
 });
