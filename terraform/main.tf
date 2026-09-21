@@ -7,11 +7,11 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "my-terraform-state-bucket"
+    bucket = "iraelie-terraform-state-2026"
     key = "prod/ec2/terraform.tfstate"
     region = "us-east-1"
     encrypt = true
-    dynamodb_table = "terraform-state-lock"
+    use_lockfile = true
   }
 
 }
