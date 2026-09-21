@@ -31,19 +31,3 @@ resource "aws_s3_bucket_versioning" "tf_state" {
     status = "Enabled"
   }
 }
-
-resource "aws_dynamodb_table" "tf_lock" {
-  name = "terraform-state-lock"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key = "LockID"           # required — this exact name
-
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
-
-  tags = {
-    Name = "Terraform State Lock"
-    ManagedBy = "Terraform"
-  }
-}
