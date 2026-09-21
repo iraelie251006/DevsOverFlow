@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: devflow
+  namespace: devflow
+spec:
+  selector:
+    app: devflow
+  ports:
+    - port: 80
+      targetPort: 3000
+  type: ClusterIP
