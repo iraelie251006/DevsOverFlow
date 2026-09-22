@@ -13,6 +13,7 @@ import User from "@/database/user.model";
 
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   providers: [
     GitHub,
     Google,
